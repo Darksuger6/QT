@@ -1,0 +1,51 @@
+BUG：
+qt通过channel通道与html通信原理：
+触发QT槽函数(qt通过channel)--->
+发送QT信号(channel发送html)--->
+触发html函数(html)--->
+html给出反应函数(html通过channel)--->
+QT接收到达信号(channel到qt)
+
+setcity:
+功能：点击setcity按钮，发送信号，html获取城市，返回结果，接收到并将结果上传setCityLable
+	QT槽函数：setCity(QString city)
+	QT发送信号：cityChanged(QString city)
+	HTML函数：testSetCity(city)
+	反应函数：cityChangeResult(QString result)
+	QT到达信号：setCityLable(QString city)
+lineEdit_search：
+功能：输入搜索内容保存cont，发送信号，html收到内容后自动补全相关位置，返回结果，接收到达信号中的数据并实现给listview
+	QT槽函数：searhInputChanged(cont)
+	QT发送信号：inputChanged(QString input)
+	HTML函数：dealComplete(cont)
+	反应函数：getAutocomplete(QJsonObject result)
+	QT到达信号：sendAutocomplete(QJsonObject autocom)
+	QT槽函数：setAutoComplete(QJsonObject result)
+
+listview：
+功能：接收上一步setAutoComplete_1的数据，选中一个作为location，发送信号，html收到location设置为起点并在地图上显示，将位置数据返回给qt，并debug已设置起点位置，并设置状态起点设定完成
+	QT槽函数：set_startlocation(QJsonObject location);
+	QT发送信号：startlocation(QString location)
+	HTML函数：_startlocation(location)
+	反应函数：
+	QT到达信号：
+	QT槽函数：
+listview_2：
+功能：接收上一步setAutoComplete_2的数据，选中一个作为location，发送信号，html收到location设置为终点并在地图上显示，将位置数据返回给qt，并debug已设置终点位置，并设置状态终点设定完成
+	QT槽函数：set_endlocation(QJsonObject location);
+	QT发送信号：endlocation(QString location)
+	HTML函数：_endlocation(location)
+	反应函数：
+	QT到达信号：
+	QT槽函数：
+
+
+setRoute：
+功能：接收起点终点状态是否完成，未完成提示请输入起点或者终点，完成后激活navButton，
+	点击navButton后，将信号发送给html，html收到点击信号后在地图上绘制起点和终点的路线图，将绘制信息返回给qt，并debug出已为您规划路线
+	QT槽函数：
+	QT发送信号：
+	HTML函数：
+	反应函数：
+	QT到达信号：
+	QT槽函数：

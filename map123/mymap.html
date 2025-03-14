@@ -1,0 +1,44 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+
+    <title>地图显示</title>
+    <style>
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<!-- 安全配置必须放在地图API脚本之前 -->
+<script>
+    window._AMapSecurityConfig = {
+        securityJsCode: "eccf45812b483258d1c6a8902532155a",
+        // serviceHost: "http://your-proxy-server.com" // 本地调试时如果需要代理才配置
+    };
+</script>
+
+<body>
+
+    <div id="container"></div>
+    <!-- 加载地图JSAPI脚本 -->
+    <script
+        src="https://webapi.amap.com/maps?v=1.4.15&key=10d85eb8594045a8c7bf3f39e59f024c&plugin=AMap.Driving,AMap.Autocomplete"></script>
+    <script>
+        var map = new AMap.Map('container', {
+            resizeEnable: true, //是否监控地图容器尺寸变化
+            zoom: 11, //初始化地图层级
+            center: [116.397428, 39.90923] //初始化地图中心点
+        });
+    </script>
+</body>
+
+</html>

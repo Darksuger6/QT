@@ -1,0 +1,7 @@
+﻿<RCC>
+    <qresource prefix="/">
+        <file>mymap.html</file>
+        <file>mymap_ba.html</file>
+        <file>qwebchannel.js</file>
+    </qresource>
+</RCC>
