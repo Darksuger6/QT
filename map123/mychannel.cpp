@@ -1,4 +1,4 @@
-﻿#include "myChannel.h"
+#include "myChannel.h"
 
 myChannel::myChannel(QObject *parent)
     :QObject(parent)

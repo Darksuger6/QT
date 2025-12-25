@@ -1,4 +1,4 @@
-﻿#ifndef __MYCHANNEL_H__
+#ifndef __MYCHANNEL_H__
 #define __MYCHANNEL_H__
 
 #include <QWebChannel>
