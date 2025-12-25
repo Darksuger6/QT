@@ -18,7 +18,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    // QT²Ûº¯Êý: qt --> myChannel
+    // QTå‡½æ•°: qt --> myChannel
     void setCity();
     void searhInputChanged_1(QString cont);
     void searhInputChanged_2(QString cont);

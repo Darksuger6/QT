@@ -15,12 +15,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    // qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "7777");    // Ô¶³Ìdebug
+    // qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "7777");    // è¿œç¨‹debug
     _myChannel  = new myChannel(this);
     _startModel = new QStandardItemModel(this);
     _endModel   = new QStandardItemModel(this);
 
-    //ĞÂ½¨Ò»¸öwebchannel
+    //æ–°å»ºä¸€ä¸ªwebchannel
     QWebChannel* web_channel = new QWebChannel(this);
     web_channel->registerObject("qtChannel",_myChannel);
 
@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->listView_2->setModel(_endModel);
 
     QObject::connect(_myChannel, &myChannel::routeError, [this](QString msg){
-        QMessageBox::critical(this, "×ø±ê´íÎó", msg);
+        QMessageBox::critical(this, "åæ ‡é”™è¯¯", msg);
     });
 
     QObject::connect(ui->pushButton_setcity, &QPushButton::clicked, this, &MainWindow::setCity);
@@ -48,14 +48,14 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->listView, &QListView::clicked, [this](const QModelIndex &index) {
         QJsonObject location;
         location["location"] = index.data(Qt::UserRole).toString();
-        qDebug() << "startlocation:" << location["location"].toString(); // Ìí¼Óµ÷ÊÔÊä³ö
+        qDebug() << "startlocation:" << location["location"].toString(); // æ·»åŠ è°ƒè¯•è¾“å‡º
         this->set_startlocation(location);
     });
 
     QObject::connect(ui->listView_2, &QListView::clicked, [this](const QModelIndex &index) {
         QJsonObject location;
         location["location"] = index.data(Qt::UserRole).toString();
-        qDebug() << "endlocation:" << location["location"].toString(); // Ìí¼Óµ÷ÊÔÊä³ö
+        qDebug() << "endlocation:" << location["location"].toString(); // æ·»åŠ è°ƒè¯•è¾“å‡º
         this->set_endlocation(location);
     });
 
@@ -66,7 +66,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-/**************************QT²Ûº¯Êı**************************/
+/**************************QTæ§½å‡½æ•°**************************/
 void MainWindow::setCity()
 {
     QString city = ui->lineEdit_setcity->text().trimmed();
@@ -103,12 +103,12 @@ void MainWindow::set_endlocation(QJsonObject location)
     _myChannel->endlocation(locationStr);
     checkRouteStatus();
 }
-/**************************×Ô¶¯²¹È«º¯Êı**************************/
+/**************************è‡ªåŠ¨è¡¥å…¨å‡½æ•°**************************/
 void MainWindow::setAutoComplete_1(QJsonObject result) {
     _startModel->clear();
-    // ÑéÖ¤Êı¾İ½á¹¹
+    // éªŒè¯æ•°æ®ç»“æ„
     if (!result.contains("tips") || !result["tips"].isArray()) {
-        qWarning() << "ÎŞĞ§µÄJSON½á¹¹";
+        qWarning() << "æ— æ•ˆçš„JSONç»“æ„";
         return;
     }
 
@@ -117,7 +117,7 @@ void MainWindow::setAutoComplete_1(QJsonObject result) {
         QJsonObject d = e.toObject();
         if (d.contains("name") && d.contains("location")) {
             QJsonObject locationObj = d["location"].toObject();
-            // ÌáÈ¡¾­Î³¶È
+            // æå–ç»çº¬åº¦
             double lng = locationObj["lng"].toDouble();
             double lat = locationObj["lat"].toDouble();
 
@@ -127,7 +127,7 @@ void MainWindow::setAutoComplete_1(QJsonObject result) {
             QStandardItem *item = new QStandardItem(d["name"].toString());
             //     QString s = d["name"].toString();
             //     QStandardItem *item = new QStandardItem(s);
-            item->setData(locationStr, Qt::UserRole); // ´æ´¢¾­Î³¶È×Ö·û´®
+            item->setData(locationStr, Qt::UserRole); // å­˜å‚¨ç»çº¬åº¦å­—ç¬¦ä¸²
             _startModel->appendRow(item);
         }
 
@@ -137,9 +137,9 @@ void MainWindow::setAutoComplete_1(QJsonObject result) {
 
 void MainWindow::setAutoComplete_2(QJsonObject result) {
     _endModel->clear();
-    // ÑéÖ¤Êı¾İ½á¹¹
+    // éªŒè¯æ•°æ®ç»“æ„
     if (!result.contains("tips") || !result["tips"].isArray()) {
-        qWarning() << "ÎŞĞ§µÄJSON½á¹¹";
+        qWarning() << "æ— æ•ˆçš„JSONç»“æ„";
         return;
     }
     QJsonArray tips = result["tips"].toArray();
@@ -164,7 +164,7 @@ void MainWindow::setAutoComplete_2(QJsonObject result) {
 void MainWindow::on_navButton_clicked()
 {
     if (_startModel->rowCount() == 0 || _endModel->rowCount() == 0) {
-        QMessageBox::warning(this, "Warning", "ÇëÏÈÉèÖÃÆğµãºÍÖÕµã£¡");
+        QMessageBox::warning(this, "Warning", "è¯·å…ˆè®¾ç½®èµ·ç‚¹å’Œç»ˆç‚¹ï¼");
         return;
     }
     _myChannel->selectRoute();
