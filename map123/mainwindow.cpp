@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     web_channel->registerObject("qtChannel",_myChannel);
 
     ui->webengineview->page()->setWebChannel(web_channel);
+    // ui->webengineview->load(QUrl("qrc:/mymap.html"));
     ui->webengineview->load(QUrl("qrc:/mymap_ba.html"));
     ui->listView->setModel(_startModel);
     ui->listView_2->setModel(_endModel);
@@ -37,7 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(_myChannel, &myChannel::setCityLable, [this](QString city) {
         ui->label_city->setText(QString::fromLocal8Bit("city:") + city);
     });
-
 
     QObject::connect(_myChannel,&myChannel::sendAutocomplete_1,this,&MainWindow::setAutoComplete_1);
     QObject::connect(ui->lineEdit_search,&QLineEdit::textEdited,this,&MainWindow::searhInputChanged_1);
@@ -66,13 +66,14 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
 /**************************QT槽函数**************************/
 void MainWindow::setCity()
 {
     QString city = ui->lineEdit_setcity->text().trimmed();
     if (city.size() == 0)
     {
-        QMessageBox::warning(this,"Warning","please enter a city!");
+        QMessageBox::warning(this,"Warning","请输入城市!");
         return;
     }
     _myChannel->setCity(city);
@@ -103,6 +104,7 @@ void MainWindow::set_endlocation(QJsonObject location)
     _myChannel->endlocation(locationStr);
     checkRouteStatus();
 }
+
 /**************************自动补全函数**************************/
 void MainWindow::setAutoComplete_1(QJsonObject result) {
     _startModel->clear();
@@ -130,8 +132,6 @@ void MainWindow::setAutoComplete_1(QJsonObject result) {
             item->setData(locationStr, Qt::UserRole); // 存储经纬度字符串
             _startModel->appendRow(item);
         }
-
-
     }
 }
 
@@ -159,8 +159,8 @@ void MainWindow::setAutoComplete_2(QJsonObject result) {
         }
     }
 }
-/*************************************************************/
 
+/*************************************************************/
 void MainWindow::on_navButton_clicked()
 {
     if (_startModel->rowCount() == 0 || _endModel->rowCount() == 0) {
@@ -178,3 +178,19 @@ void MainWindow::checkRouteStatus()
         ui->navButton->setEnabled(false);
     }
 }
+
+/*************************************************************/
+void MainWindow::on_locate_PB_clicked()
+{
+    QString lngStr = ui->lineEdit_lng->text().trimmed();    // 经度
+    QString latStr = ui->lineEdit_lat->text().trimmed();    // 纬度
+    QString location = QString("%1,%2").arg(lngStr).arg(latStr);
+
+    if (ui->lineEdit_lng->text().isEmpty() && ui->lineEdit_lat->text().isEmpty()) {
+        QMessageBox::warning(this, "Warning", "请先设置起点和终点！");
+        return;
+    }
+
+    _myChannel->latlnglocation(location);
+}
+

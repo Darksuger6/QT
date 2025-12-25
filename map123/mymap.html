@@ -5,39 +5,84 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css" />
 
-    <title>地图显示</title>
-    <style>
-        html,
-        body,
-        #container {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    <!-- 安全配置必须放在地图API脚本之前 -->
+    <script>
+        window._AMapSecurityConfig = {
+            securityJsCode: "eccf45812b483258d1c6a8902532155a",
+            // serviceHost: "http://your-proxy-server.com" // 本地调试时如果需要代理才配置
+        };
+    </script>
+
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+    <script type="text/javascript"
+            src="https://webapi.amap.com/maps?v=1.4.15&key=3b38af595b172794e9fe2099fbef8a02"></script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
 </head>
 
-<!-- 安全配置必须放在地图API脚本之前 -->
-<script>
-    window._AMapSecurityConfig = {
-        securityJsCode: "！你的web端安全密钥！",
-        // serviceHost: "http://your-proxy-server.com" // 本地调试时如果需要代理才配置
-    };
-</script>
-
 <body>
-
     <div id="container"></div>
-    <!-- 加载地图JSAPI脚本 -->
-    <script
-        src="https://webapi.amap.com/maps?v=1.4.15&key=！你的web服务Key！&plugin=AMap.Driving,AMap.Autocomplete"></script>
-    <script>
-        var map = new AMap.Map('container', {
-            resizeEnable: true, //是否监控地图容器尺寸变化
+    <!-- <div id="panel"></div> -->
+    <script src="qwebchannel.js"></script>
+    <script type="text/javascript">
+
+        //var lng = 116.397428;
+        //var lat = 39.90923;
+
+        var map = new AMap.Map("container", {
+            resizeEnable: true,
             zoom: 11, //初始化地图层级
-            center: [116.397428, 39.90923] //初始化地图中心点
+            center: [116.397428, 39.90923], //初始化地图中心点
+            //center: [lng, lat],
         });
+
+        // Qt->Web
+        var mchannel;
+        window.onload = function () {
+            if (typeof qt != 'undefined') {
+                new QWebChannel(qt.webChannelTransport, function (channel) {
+                    channel.objects.qtChannel.latlnglocation.connect(_latlnglocation);
+                    mchannel = channel;
+                }
+                );
+            }
+            else {
+                alert("qt对象获取失败！");
+            }
+        }
+
+        var locateIcon = new AMap.Icon({
+            size: new AMap.Size(25, 34),
+            image: 'http://a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',
+            imageSize: new AMap.Size(135, 40),
+            imageOffset: new AMap.Pixel(-95, -3)
+        });
+
+        var locateMarker;
+
+        function _latlnglocation(location) {
+            console.log(location);
+            const parts = location.split(",");
+            const lng = parseFloat(parts[0]);
+            const lat = parseFloat(parts[1]);
+
+            const pos = new AMap.LngLat(lng, lat);
+
+            if (locateMarker) {
+                locateMarker.setPosition(pos);
+            } else {
+                locateMarker = new AMap.Marker({
+                    position: pos,
+                    icon: locateIcon,
+                    map: map
+                });
+            }
+
+            map.setCenter(locateMarker.getPosition());
+            //map.setZoom(15);  // 设置合适的缩放级别
+        }
+
     </script>
 </body>
 

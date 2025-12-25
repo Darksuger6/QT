@@ -18,7 +18,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    // QT函数: qt --> myChannel
+    // QT槽函数: qt --> myChannel
     void setCity();
     void searhInputChanged_1(QString cont);
     void searhInputChanged_2(QString cont);
@@ -26,8 +26,12 @@ public:
     void setAutoComplete_2(QJsonObject result);
     void set_startlocation(QJsonObject startlocation);
     void set_endlocation(QJsonObject endlocation);
+
     void on_navButton_clicked();
     void checkRouteStatus();
+
+private slots:
+    void on_locate_PB_clicked();
 
 private:
     Ui::MainWindow *ui;

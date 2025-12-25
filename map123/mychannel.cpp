@@ -7,7 +7,6 @@ myChannel::myChannel(QObject *parent)
 }
 
 // emit 发射信号
-
 void myChannel::cityChangeResult(QString result)
 {
     emit setCityLable(result);
@@ -26,4 +25,9 @@ void myChannel::getAutocomplete_1(QJsonObject result)
 void myChannel::getAutocomplete_2(QJsonObject result)
 {
     emit sendAutocomplete_2(result);
+}
+
+void myChannel::setlatlnglocation(QString location)
+{
+    emit latlnglocation(location);
 }
